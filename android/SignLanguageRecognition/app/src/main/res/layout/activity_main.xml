@@ -39,7 +39,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/personal_number_login_button"
+        android:id="@+id/sign_in"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="55dp"
@@ -48,7 +48,7 @@
         android:textColor="@color/loginActivityText"/>
 
     <Button
-        android:id="@+id/fio_activity_button"
+        android:id="@+id/sign_up"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
