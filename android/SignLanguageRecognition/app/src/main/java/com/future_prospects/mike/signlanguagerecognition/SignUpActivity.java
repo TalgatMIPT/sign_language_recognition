@@ -9,26 +9,26 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LoginActivity extends AppCompatActivity {
-    @BindView(R.id.sign_in)
+public class SignUpActivity extends AppCompatActivity {
+    @BindView(R.id.sign_in1)
     Button loginButton;
-    @BindView(R.id.sign_up)
+    @BindView(R.id.sign_up1)
     Button regButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);
     }
 
-    @OnClick(R.id.sign_in)
+    @OnClick(R.id.sign_in1)
     public void signInClick(){
-        /** sign in process */
+        startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
     }
 
-    @OnClick(R.id.sign_up)
+    @OnClick(R.id.sign_up1)
     public void SignUpClick(){
-        startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
+        /** sign up process */
     }
 }

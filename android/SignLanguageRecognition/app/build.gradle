@@ -30,5 +30,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.firebaseui:firebase-ui-auth:3.0.0'
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
+    compile 'com.jakewharton:butterknife:8.7.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
     testCompile 'junit:junit:4.12'
 }
