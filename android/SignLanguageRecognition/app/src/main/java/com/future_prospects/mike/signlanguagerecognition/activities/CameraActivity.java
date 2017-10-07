@@ -3,7 +3,10 @@ package com.future_prospects.mike.signlanguagerecognition.activities;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Rect;
+import android.graphics.YuvImage;
 import android.hardware.Camera;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.SurfaceHolder;
@@ -13,10 +16,12 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.future_prospects.mike.signlanguagerecognition.R;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -146,24 +151,19 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     @Override
     public void onPictureTaken(byte[] paramArrayOfByte, Camera paramCamera)
     {
-        // сохраняем полученные jpg в папке /sdcard/CameraExample/
-        // имя файла - System.currentTimeMillis()
-
-        try
-        {
-            File saveDir = new File("/sdcard/CameraExample/");
-
-            if (!saveDir.exists())
-            {
+        try {
+            String filename = String.format(getExternalCacheDir().getAbsolutePath() + "/SLR/%d.jpg", System.currentTimeMillis());
+            File saveDir = new File(filename);
+            if (!saveDir.exists()) {
                 saveDir.mkdirs();
             }
 
-            FileOutputStream os = new FileOutputStream(String.format("/sdcard/CameraExample/%d.jpg", System.currentTimeMillis()));
+            FileOutputStream os = new FileOutputStream(filename);
             os.write(paramArrayOfByte);
             os.close();
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
+            e.printStackTrace();
         }
 
         // после того, как снимок сделан, показ превью отключается. необходимо включить его
@@ -181,8 +181,24 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     }
 
     @Override
-    public void onPreviewFrame(byte[] paramArrayOfByte, Camera paramCamera)
+    public void onPreviewFrame(byte[] data, Camera camera)
     {
-        // здесь можно обрабатывать изображение, показываемое в preview
+        try {
+            String filename = String.format(getExternalCacheDir().getAbsolutePath() + "/SLR/%d.jpg", System.currentTimeMillis());
+            Camera.Parameters parameters = camera.getParameters();
+            Camera.Size size = parameters.getPreviewSize();
+            YuvImage image = new YuvImage(data, parameters.getPreviewFormat(),
+                    size.width, size.height, null);
+            File file = new File(filename);
+            FileOutputStream filecon = new FileOutputStream(file);
+            image.compressToJpeg(
+                    new Rect(0, 0, image.getWidth(), image.getHeight()), 90,
+                    filecon);
+        } catch (FileNotFoundException e) {
+            Toast toast = Toast
+                    .makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG);
+            toast.show();
+        }
+//        camera.startPreview();
     }
 }
