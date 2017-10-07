@@ -53,7 +53,7 @@ public class ImageSenderAsyncTask extends AsyncTask<ProcessImage, Void, String> 
         try {
             Response response = client.newCall(request).execute();
             if (response.isSuccessful()) {
-                Log.w(TAG, "Response is not successful");
+                Log.w(TAG, "Response is successful");
             }
 
             if (response.body() != null) {

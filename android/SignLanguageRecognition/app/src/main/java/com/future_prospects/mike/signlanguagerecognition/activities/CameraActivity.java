@@ -6,9 +6,8 @@ import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.graphics.YuvImage;
 import android.hardware.Camera;
-import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -19,18 +18,26 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.future_prospects.mike.signlanguagerecognition.R;
+import com.future_prospects.mike.signlanguagerecognition.model.ProcessImage;
+import com.future_prospects.mike.signlanguagerecognition.presentors.ImagePresentor;
+import com.future_prospects.mike.signlanguagerecognition.server.ImageSenderAsyncTask;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class CameraActivity extends Activity implements SurfaceHolder.Callback, View.OnClickListener, Camera.PictureCallback, Camera.PreviewCallback, Camera.AutoFocusCallback
+public class CameraActivity extends Activity implements SurfaceHolder.Callback, View.OnClickListener,
+        Camera.PictureCallback, Camera.PreviewCallback, Camera.AutoFocusCallback, ImagePresentor
 {
     private Camera camera;
     private SurfaceHolder surfaceHolder;
     private SurfaceView preview;
     private Button shotBtn;
+    private boolean photoAvailable = true;
+    private long curtime = -1;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -38,7 +45,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         super.onCreate(savedInstanceState);
 
         // если хотим, чтобы приложение постоянно имело портретную ориентацию
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // если хотим, чтобы приложение было полноэкранным
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -183,22 +190,58 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     @Override
     public void onPreviewFrame(byte[] data, Camera camera)
     {
-        try {
-            String filename = String.format(getExternalCacheDir().getAbsolutePath() + "/SLR/%d.jpg", System.currentTimeMillis());
-            Camera.Parameters parameters = camera.getParameters();
-            Camera.Size size = parameters.getPreviewSize();
-            YuvImage image = new YuvImage(data, parameters.getPreviewFormat(),
-                    size.width, size.height, null);
-            File file = new File(filename);
-            FileOutputStream filecon = new FileOutputStream(file);
-            image.compressToJpeg(
-                    new Rect(0, 0, image.getWidth(), image.getHeight()), 90,
-                    filecon);
-        } catch (FileNotFoundException e) {
-            Toast toast = Toast
-                    .makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG);
-            toast.show();
+        if(curtime == -1)
+            curtime = System.currentTimeMillis();
+        if (System.currentTimeMillis() - curtime <= 1000) {
+            try {
+                String filename = String.format(getExternalCacheDir().getAbsolutePath() + "/SLR/%d.jpg", System.currentTimeMillis());
+                Camera.Parameters parameters = camera.getParameters();
+                Camera.Size size = parameters.getPreviewSize();
+                YuvImage image = new YuvImage(data, parameters.getPreviewFormat(),
+                        size.width, size.height, null);
+                File file = new File(filename);
+                FileOutputStream filecon = new FileOutputStream(file);
+                image.compressToJpeg(
+                        new Rect(0, 0, image.getWidth(), image.getHeight()), 90,
+                        filecon);
+            } catch (FileNotFoundException e) {
+                Toast toast = Toast
+                        .makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG);
+                toast.show();
+            }
         }
-//        camera.startPreview();
+        else if (photoAvailable) {
+            File directory = new File(getExternalCacheDir().getAbsolutePath() + "/SLR");
+            File randomPhoto = new File(directory.listFiles()[5].getPath());
+            int size = (int) randomPhoto.length();
+            byte[] bytes = new byte[size];
+            try {
+                BufferedInputStream buf = new BufferedInputStream(new FileInputStream(randomPhoto));
+                buf.read(bytes, 0, bytes.length);
+                buf.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            String[] children = directory.list();
+            for (int i = 0; i < children.length; i++) {
+                new File(directory, children[i]).delete();
+            }
+            ProcessImage image = new ProcessImage(bytes);
+            new ImageSenderAsyncTask(this, getApplicationContext()).execute(image);
+            photoAvailable = false;
+        }
+    }
+
+    @Override
+    public void publicResult(String s) {
+        Log.d("Char", s);
+        photoAvailable = true;
+        curtime = System.currentTimeMillis();
+    }
+
+    @Override
+    public void setPhotoAvailable() {
+
     }
 }
