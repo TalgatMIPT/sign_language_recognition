@@ -199,6 +199,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                 Camera.Size size = parameters.getPreviewSize();
                 YuvImage image = new YuvImage(data, parameters.getPreviewFormat(),
                         size.width, size.height, null);
+
                 File file = new File(filename);
                 FileOutputStream filecon = new FileOutputStream(file);
                 image.compressToJpeg(
@@ -243,8 +244,4 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         curtime = System.currentTimeMillis();
     }
 
-    @Override
-    public void setPhotoAvailable() {
-
-    }
 }
