@@ -3,4 +3,12 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="loginButtons">#3485ff</color>
+    <color name="loginActivityText">#FFFFFF</color>
+    <color name="my_message">#0d00ff</color>
+    <color name="dispatcher_message">#aeaeae</color>
+    <color name="trueStrokeColor">#377b2f</color>
+    <color name="falseStrokeColor">#872525</color>
+    <color name="trueFenceColor">#772bff00</color>
+    <color name="falseFenceColor">#83ff0109</color>
 </resources>

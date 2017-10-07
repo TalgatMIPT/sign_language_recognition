@@ -9,7 +9,7 @@
     android:paddingTop="32dp"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    tools:context=".activities.LoginActivity">
+    tools:context=".activities.SignUpActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,12 +17,12 @@
         android:orientation="horizontal"
         android:gravity="center_vertical">
         <EditText
-            android:id="@+id/username"
+            android:id="@+id/second_name_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/personal_number_text"
+            android:hint="username"
             android:textSize="@dimen/login_input_text_size"
-            android:text="admin"/>
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -31,30 +31,42 @@
         android:orientation="horizontal"
         android:gravity="center_vertical">
         <EditText
-            android:id="@+id/password"
+            android:id="@+id/first_name_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/password"
+            android:hint="password"
             android:textSize="@dimen/login_input_text_size"
-            android:inputType="textPassword"
-            android:text="admin"/>
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <EditText
+            android:id="@+id/patronymic_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="retry password"
+            android:textSize="@dimen/login_input_text_size"
+            />
     </LinearLayout>
 
     <Button
-        android:id="@+id/sign_in"
+        android:id="@+id/sign_up1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="55dp"
-        android:text="@string/login"
+        android:text="Sign Up"
         android:background="@color/loginButtons"
         android:textColor="@color/loginActivityText"/>
 
     <Button
-        android:id="@+id/sign_up"
+        android:id="@+id/sign_in1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="@string/fio_login"
+        android:text="Sign In"
         android:background="@color/loginButtons"
         android:textColor="@color/loginActivityText"/>
 </LinearLayout>
