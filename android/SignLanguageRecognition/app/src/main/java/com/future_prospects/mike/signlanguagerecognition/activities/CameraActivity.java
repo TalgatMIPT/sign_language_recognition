@@ -212,6 +212,9 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         }
         else if (photoAvailable) {
             File directory = new File(getExternalCacheDir().getAbsolutePath() + "/SLR");
+            if(!directory.isDirectory()){
+                directory.mkdir();
+            }
             File randomPhoto = new File(directory.listFiles()[5].getPath());
             int size = (int) randomPhoto.length();
             byte[] bytes = new byte[size];
