@@ -3,13 +3,11 @@ package com.future_prospects.mike.signlanguagerecognition.server;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
+import android.util.Base64;
 import android.util.Log;
 
 import com.future_prospects.mike.signlanguagerecognition.model.ProcessImage;
 import com.future_prospects.mike.signlanguagerecognition.presentors.ImagePresentor;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -40,10 +38,15 @@ public class ImageSenderAsyncTask extends AsyncTask<ProcessImage, Void, String> 
         serverUrl = properties.getProperty("host");
     }
 
+    public ImageSenderAsyncTask(ImagePresentor imagePresentor, String url) {
+        this.imagePresentor = imagePresentor;
+        serverUrl = url;
+    }
+
     @Override
     protected String doInBackground(ProcessImage... processImages) {
         OkHttpClient client = new OkHttpClient();
-        RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), processImages[0].getData());
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), createJson(processImages[0].getData()));
         Request request = new Request.Builder().url(serverUrl)
                 .post(requestBody)
                 .build();
@@ -53,13 +56,9 @@ public class ImageSenderAsyncTask extends AsyncTask<ProcessImage, Void, String> 
                 Log.w(TAG, "Response is not successful");
             }
 
-            if (response.body() != null) try {
-                JSONObject jsonResponse = new JSONObject(response.body().string());
-                return jsonResponse.getString("character");
-            } catch (JSONException e) {
-                Log.w(TAG, "Could not parse json");
-            }
-            else {
+            if (response.body() != null) {
+                return response.body().string();
+            } else {
                 Log.w(TAG, "Response body is null");
             }
         } catch (IOException e) {
@@ -74,5 +73,10 @@ public class ImageSenderAsyncTask extends AsyncTask<ProcessImage, Void, String> 
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
         imagePresentor.publicResult(s);
+    }
+
+    private String createJson(byte[] array) {
+        String image = Base64.encodeToString(array, Base64.NO_WRAP);
+        return "{\"img\": \""+image+"\"}";
     }
 }
