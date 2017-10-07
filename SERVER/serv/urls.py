@@ -4,4 +4,5 @@ from hack_serv import views
 
 urlpatterns = patterns('',
                        url(r'reg/$', views.reg, name='reg'),
-                       url(r'login/$', views.login, name='login'))
+                       url(r'login/$', views.login, name='login'),
+                       url(r'recogn/$', views.recogn, name='recogn'))

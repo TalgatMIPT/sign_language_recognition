@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'reg/$', views.reg, name='reg'),
     url(r'login/$', views.login, name='login'),
+    url(r'recogn/$', views.recogn, name='recogn'),
 ]
