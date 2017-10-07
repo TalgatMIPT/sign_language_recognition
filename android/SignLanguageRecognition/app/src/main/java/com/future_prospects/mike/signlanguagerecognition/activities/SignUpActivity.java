@@ -1,9 +1,11 @@
-package com.future_prospects.mike.signlanguagerecognition;
+package com.future_prospects.mike.signlanguagerecognition.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
+
+import com.future_prospects.mike.signlanguagerecognition.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

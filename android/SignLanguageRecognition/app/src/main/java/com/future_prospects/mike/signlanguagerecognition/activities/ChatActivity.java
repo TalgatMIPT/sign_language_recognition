@@ -1,10 +1,12 @@
-package com.future_prospects.mike.signlanguagerecognition;
+package com.future_prospects.mike.signlanguagerecognition.activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.future_prospects.mike.signlanguagerecognition.R;
 import com.github.bassaer.chatmessageview.views.ChatView;
 
 import butterknife.BindView;
@@ -24,6 +26,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("foo", "bar");
+                startActivity(new Intent(ChatActivity.this, CameraActivity.class));
             }
         });
     }

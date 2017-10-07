@@ -1,13 +1,17 @@
-package com.future_prospects.mike.signlanguagerecognition;
+package com.future_prospects.mike.signlanguagerecognition.activities;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.abbyy.mobile.imaging.MILicenser;
+import com.future_prospects.mike.signlanguagerecognition.MIContext;
+import com.future_prospects.mike.signlanguagerecognition.R;
 import com.future_prospects.mike.signlanguagerecognition.model.User;
 import com.future_prospects.mike.signlanguagerecognition.presentors.AuthorizePresentor;
 import com.future_prospects.mike.signlanguagerecognition.server.AuthorizeUserAsyncTask;
@@ -46,6 +50,10 @@ public class LoginActivity extends AppCompatActivity implements AuthorizePresent
             Log.e( TAG, "MILicenser.setLicense() failed", exception );
         }
         MIContext.createInstance();
+
+        ActivityCompat.requestPermissions(LoginActivity.this,
+                new String[]{Manifest.permission.CAMERA},
+                228);
     }
 
     @OnClick(R.id.sign_in)
