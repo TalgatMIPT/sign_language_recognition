@@ -38,7 +38,7 @@ public class AuthorizeUserAsyncTask extends AsyncTask<String, Void, String> {
             Log.e(TAG, "Could not load server connection properties", e);
         }
 
-        serverUrl = properties.getProperty("host");
+        serverUrl = properties.getProperty("authPoint");
     }
 
     public AuthorizeUserAsyncTask(AuthorizePresentor presentor, String url) {
@@ -64,8 +64,8 @@ public class AuthorizeUserAsyncTask extends AsyncTask<String, Void, String> {
             }
 
             if (response.body() != null) {
-                Log.d(TAG, response.body().string());
-                return response.body().string();
+                Log.d(TAG, response.message());
+                return response.message();
             } else {
                 Log.w(TAG, "Response body is null");
             }

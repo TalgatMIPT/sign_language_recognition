@@ -17,11 +17,12 @@
         android:orientation="horizontal"
         android:gravity="center_vertical">
         <EditText
-            android:id="@+id/personal_number_input"
+            android:id="@+id/username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/personal_number_text"
-            android:textSize="@dimen/login_input_text_size" />
+            android:textSize="@dimen/login_input_text_size"
+            android:text="admin"/>
     </LinearLayout>
 
     <LinearLayout
@@ -30,12 +31,13 @@
         android:orientation="horizontal"
         android:gravity="center_vertical">
         <EditText
-            android:id="@+id/personal_number_password_input"
+            android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/password"
             android:textSize="@dimen/login_input_text_size"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:text="admin"/>
     </LinearLayout>
 
     <Button
