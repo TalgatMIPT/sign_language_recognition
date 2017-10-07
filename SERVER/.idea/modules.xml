@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/hack2.iml" filepath="$PROJECT_DIR$/.idea/hack2.iml" />
+      <module fileurl="file://$USER_HOME$/Downloads/django-master/django-master/django/django.iml" filepath="$USER_HOME$/Downloads/django-master/django-master/django/django.iml" group="hack2" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/hack2.iml" filepath="$PROJECT_DIR$/.idea/hack2.iml" group="hack2" />
     </modules>
   </component>
 </project>
