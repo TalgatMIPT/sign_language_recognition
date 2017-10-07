@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">SignLanguageRecognition</string>
+    <string name="login">sign in</string>
+    <string name="personal_number_text">username</string>
+    <string name="password">password</string>
+    <string name="fio_login">sign up</string>
 </resources>
