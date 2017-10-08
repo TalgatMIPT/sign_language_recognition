@@ -27,11 +27,9 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class CameraActivity extends Activity implements SurfaceHolder.Callback, View.OnClickListener,
@@ -206,14 +204,17 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                 Camera.Size size = parameters.getPreviewSize();
                 YuvImage image = new YuvImage(data, parameters.getPreviewFormat(),
                         size.width, size.height, null);
-                photos.add(image.getYuvData());
 
                 File file = new File(filename);
                 FileOutputStream filecon = new FileOutputStream(file);
                 image.compressToJpeg(
                         new Rect(0, 0, image.getWidth(), image.getHeight()), 90,
                         filecon);
-            } catch (FileNotFoundException e) {
+                byte[] array = new byte[(int) file.length()];
+                FileInputStream io = new FileInputStream(file);
+                io.read(array);
+                photos.add(array);
+            } catch (IOException e) {
                 Toast toast = Toast
                         .makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG);
                 toast.show();
