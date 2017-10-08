@@ -16,6 +16,10 @@ import com.future_prospects.mike.signlanguagerecognition.model.User;
 import com.future_prospects.mike.signlanguagerecognition.presentors.AuthorizePresentor;
 import com.future_prospects.mike.signlanguagerecognition.server.AuthorizeUserAsyncTask;
 
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
+
 import java.io.InputStream;
 
 import butterknife.BindView;
@@ -72,4 +76,37 @@ public class LoginActivity extends AppCompatActivity implements AuthorizePresent
     public void publicResult(User user) {
         startActivity(new Intent(LoginActivity.this, ChatActivity.class));
     }
+
+
+
+    private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
+        @Override
+        public void onManagerConnected(int status) {
+            switch (status) {
+                case LoaderCallbackInterface.SUCCESS: {
+                    Log.i(TAG, "OpenCV loaded successfully");
+//                    mOpenCvCameraView.enableView();
+//                    mOpenCvCameraView.setOnTouchListener(ColorBlobDetectionActivity.this);
+                }
+                break;
+                default: {
+                    super.onManagerConnected(status);
+                }
+                break;
+            }
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!OpenCVLoader.initDebug()) {
+            Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
+            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_2, this, mLoaderCallback);
+        } else {
+            Log.d(TAG, "OpenCV library found inside package. Using it!");
+            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+        }
+    }
+
 }
