@@ -1,20 +1,15 @@
-import os
-from operator import is_
+import base64
+import json
+from io import BytesIO
 
-from django.shortcuts import render
+from PIL import Image
+from django.contrib import auth
 from django.contrib.auth.models import User
 from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import authenticate, login
-from django.contrib import auth
-from django.contrib.auth.forms import UserCreationForm
-import base64
-from PIL import Image
-from io import BytesIO
-from .models import Messages
-import json
-from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
+
+from .models import Messages
 
 
 @csrf_exempt
@@ -120,30 +115,43 @@ def send_message(request):
 def check_message(request):
     # message = get_object_or_404(Messages, )
     if request.method == 'POST':
+
         req_data = str(request.body.decode('utf-8'))
         parsed_data = json.loads(req_data)
+
         client_r = str(parsed_data.get('client_r'))
+        user_r = User.objects.get(username=client_r)
+        print("\n\n")
 
         print("CHECK_MESSAGE_TO:" + str(client_r))
-
-        messages_inf = []
         # messages_inf.extend(get_object_or_404(Messages, client_r=client_r, is_received=False))
+        # print(str(Messages.objects.first()))
+        messages_inf = Messages.objects.filter(client_r=user_r, is_received=False)  # .values()
+        print("PARSED")
+        # print(str(messages_inf))
+        print("-------" + str(messages_inf) + "-------------\n")
 
-        messages_inf.extend(Messages.objects.get(client_r=client_r, is_received=False))
-
-        print(str(Messages.objects.filter(client_r=client_r, is_received=False)))
-
-        if messages_inf is None and messages_inf.size() is 0:
+        if messages_inf is None and len(messages_inf) is 0:
             return HttpResponse("None")
         if messages_inf[0] is None:
             return HttpResponse("None")
 
-        messages_inf[0].is_received = True
+        current_message = messages_inf[0]
+        messages_inf[0].delete()
+        # messages_inf[0].is_received = True
+        # messages_inf[0].save()
+        # print(messages_inf[0].id)
 
-        message_dict = {"client_s": str(messages_inf[0].client_s),
-                        "client_r": str(messages_inf[0].client_r),
-                        "message": str(messages_inf[0].message),
-                        "message_date": str(messages_inf[0].message_date)}
-        json_message_dict = json.dumps(message_dict)
-        return HttpResponse(json_message_dict)
+        # temp = Messages.objects.get(id=messages_inf[0].id)
+        # temp.is_received = True
+        # temp.save(['is_received'])
+        print(current_message.client_s)
+
+        message_dict = {"client_s": str(current_message.client_s),
+                        "client_r": str(current_message.client_r),
+                        "message": str(current_message.message),
+                        "message_date": str(current_message.message_date)}
+        json_message_str = json.dumps(message_dict)
+
+        return HttpResponse(str(json_message_str))
     return HttpResponse("Fail")
