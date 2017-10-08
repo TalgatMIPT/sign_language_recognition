@@ -7,3 +7,9 @@
 /build
 /captures
 .externalNativeBuild
+app/src/androidTest
+testJPG.jpg
+app/src/main/assets/blured.jpg
+app/src/main/assets/bluredFingers.jpg
+app/src/main/assets/notBlured.jpg
+
