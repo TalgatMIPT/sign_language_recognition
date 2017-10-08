@@ -24,6 +24,7 @@ import com.future_prospects.mike.signlanguagerecognition.server.ImageSenderAsync
 import com.future_prospects.mike.signlanguagerecognition.utils.PickBestImage;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -226,14 +227,12 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
             }
 
             String[] children = directory.list();
-            File bestPhoto = new File(PickBestImage.pickImage(photos));
+
+            byte[] bytes = PickBestImage.pickImage(photos);
             photos.clear();
 
-            int size = (int) bestPhoto.length();
-            byte[] bytes = new byte[size];
-
             try {
-                BufferedInputStream buf = new BufferedInputStream(new FileInputStream(bestPhoto));
+                BufferedInputStream buf = new BufferedInputStream(new ByteArrayInputStream(bytes));
                 buf.read(bytes, 0, bytes.length);
                 buf.close();
             } catch (IOException e) {
