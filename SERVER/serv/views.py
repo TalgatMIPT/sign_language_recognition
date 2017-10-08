@@ -1,14 +1,13 @@
 import base64
 import json
 from io import BytesIO
-
 from PIL import Image
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
-
+from ML import SLR2
 from .models import Messages
 
 
@@ -77,8 +76,9 @@ def recogn(request):
         rgb_im.save('temp_images/temp.jpeg')
         # do ML
         # os.remove('temp_images/tr.jpeg')
+        #
 
-        return HttpResponse("OK")
+        return HttpResponse(process_image('temp_images/temp.jpeg'))
     return HttpResponse("Fail")
 
 
@@ -132,23 +132,27 @@ def check_message(request):
         # print(str(messages_inf))
         print("-------" + str(messages_inf) + "-------------\n")
 
-        if messages_inf is None and len(messages_inf) is 0:
+        if messages_inf is None and len(messages_inf) == 0:
             return HttpResponse("None")
         if messages_inf[0] is None:
             return HttpResponse("None")
 
-        current_message = messages_inf[0]
-        messages_inf[0].delete()
+        try:
+            current_message = messages_inf[0]
+            messages_inf[0].delete()
         # messages_inf[0].is_received = True
         # messages_inf[0].save()
         # print(messages_inf[0].id)
-        print(current_message.client_s)
+            print(current_message.client_s)
 
-        message_dict = {"client_s": str(current_message.client_s),
-                        "client_r": str(current_message.client_r),
-                        "message": str(current_message.message),
-                        "message_date": str(current_message.message_date)}
-        json_message_str = json.dumps(message_dict)
+            message_dict = {"client_s": str(current_message.client_s),
+                            "client_r": str(current_message.client_r),
+                            "message": str(current_message.message),
+                            "message_date": str(current_message.message_date)}
+            json_message_str = json.dumps(message_dict)
+            return HttpResponse(str(json_message_str))
+        except:
+            return HttpResponse("None")
 
-        return HttpResponse(str(json_message_str))
+
     return HttpResponse("Fail")
