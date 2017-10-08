@@ -2,30 +2,35 @@ package com.future_prospects.mike.signlanguagerecognition.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import org.opencv.android.Utils;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 public class PickBestImage {
+    private static final String TAG = PickBestImage.class.toString();
 
     public static byte[] pickImage(List<byte[]> list) {
         int max = Integer.MIN_VALUE;
-        byte[] maxPath = list.get(0);
-        for (byte[] array : list) {
-            int cur = opencvProcess(array);
-            if (max < cur) {
-                max = cur;
-                maxPath = array;
+        if (list.size() != 0) {
+            byte[] maxPath = list.get(0);
+            for (byte[] array : list) {
+                if (opencvProcess(array)) {
+                    return array;
+                }
             }
+            return maxPath;
         }
-        return maxPath;
+        return new byte[0];
     }
 
-    private static int opencvProcess(byte[] array) {
+    private static boolean opencvProcess(byte[] array) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inDither = true;
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
@@ -40,6 +45,11 @@ public class PickBestImage {
 
         Bitmap destImage;
         destImage = Bitmap.createBitmap(image);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        destImage.compress(Bitmap.CompressFormat.JPEG, 0, out);
+        destImage = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
+        destImage = Bitmap.createScaledBitmap(destImage, 480, 240, false);
+        Log.d(TAG, "size "+destImage.getWidth()+" "+destImage.getHeight());
         Mat dst2 = new Mat();
         Utils.bitmapToMat(destImage, dst2);
         Mat laplacianImage = new Mat();
@@ -66,7 +76,7 @@ public class PickBestImage {
         }
         soglia += 6118750;
         maxLap += 6118750;
-        return maxLap - soglia;
+        return maxLap <= soglia;
     }
 
 }

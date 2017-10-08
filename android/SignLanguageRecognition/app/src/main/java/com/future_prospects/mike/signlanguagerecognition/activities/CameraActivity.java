@@ -197,7 +197,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     {
         if(curtime == -1)
             curtime = System.currentTimeMillis();
-        if (System.currentTimeMillis() - curtime <= 1000) {
+        if (System.currentTimeMillis() - curtime <= 250) {
             try {
                 String filename = String.format(getExternalCacheDir().getAbsolutePath() + "/SLR/%d.jpg", System.currentTimeMillis());
                 Camera.Parameters parameters = camera.getParameters();
