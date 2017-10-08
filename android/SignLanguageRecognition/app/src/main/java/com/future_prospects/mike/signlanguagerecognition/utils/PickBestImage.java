@@ -12,26 +12,26 @@ import java.util.List;
 
 public class PickBestImage {
 
-    public static String pickImage(List<String> list) {
+    public static byte[] pickImage(List<byte[]> list) {
         int max = Integer.MIN_VALUE;
-        String maxPath = list.get(0);
-        for (String filePath : list) {
-            int cur = opencvProcess(filePath);
+        byte[] maxPath = list.get(0);
+        for (byte[] array : list) {
+            int cur = opencvProcess(array);
             if (max < cur) {
                 max = cur;
-                maxPath = filePath;
+                maxPath = array;
             }
         }
         return maxPath;
     }
 
-    private static int opencvProcess(String fileName) {
+    private static int opencvProcess(byte[] array) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inDither = true;
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 
         Bitmap image;
-        image = BitmapFactory.decodeFile(fileName);
+        image = BitmapFactory.decodeByteArray(array, 0, array.length);
         int l = CvType.CV_8UC1; //8-bit grey scale image
         Mat matImage = new Mat();
         Utils.bitmapToMat(image, matImage);
