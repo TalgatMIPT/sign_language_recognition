@@ -16,43 +16,19 @@ import com.abbyy.mobile.imaging.MIImage;
 import com.abbyy.mobile.imaging.MIProcessor;
 import com.abbyy.mobile.imaging.errors.MIExecutionResult;
 import com.abbyy.mobile.imaging.errors.MIGenericException;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Environment;
-import android.util.Log;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import com.abbyy.mobile.imaging.FineOperation;
-import com.abbyy.mobile.imaging.MICallback;
-import com.abbyy.mobile.imaging.MIExporter;
-import com.abbyy.mobile.imaging.MIImage;
-import com.abbyy.mobile.imaging.MIProcessor;
-import com.abbyy.mobile.imaging.errors.MIExecutionResult;
-import com.abbyy.mobile.imaging.errors.MIGenericException;
-import com.future_prospects.mike.signlanguagerecognition.*;
 import com.future_prospects.mike.signlanguagerecognition.utils.CloseableUtils;
 import com.future_prospects.mike.signlanguagerecognition.utils.ObservableData;
 import com.future_prospects.mike.signlanguagerecognition.utils.Observer;
 import com.future_prospects.mike.signlanguagerecognition.utils.UriHelper;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * The context for the retention of large / important objects between recreating an Activity during the
@@ -89,10 +65,11 @@ public class MIContext {
     private MIContext() {
     }
 
-    public static void createInstance() {
+    public static MIContext createInstance() {
         if( _instance == null ) {
             _instance = new MIContext();
         }
+        return null;
     }
 
     public static MIContext getInstance() {
