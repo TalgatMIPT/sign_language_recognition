@@ -42,6 +42,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     private Button shotBtn;
     private boolean photoAvailable = true;
     private long curtime = -1;
+    private List<byte[]> photos;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -70,6 +71,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         shotBtn = (Button) findViewById(R.id.Button01);
         shotBtn.setText("Shot");
         shotBtn.setOnClickListener(this);
+        photos = new ArrayList<>();
     }
 
     @Override
@@ -203,11 +205,12 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                 Camera.Size size = parameters.getPreviewSize();
                 YuvImage image = new YuvImage(data, parameters.getPreviewFormat(),
                         size.width, size.height, null);
+                photos.add(image.getYuvData());
 
                 File file = new File(filename);
                 FileOutputStream filecon = new FileOutputStream(file);
                 image.compressToJpeg(
-                        new Rect(0, 0, image.getWidth(), image.getHeight()), 45,
+                        new Rect(0, 0, image.getWidth(), image.getHeight()), 90,
                         filecon);
             } catch (FileNotFoundException e) {
                 Toast toast = Toast
@@ -217,16 +220,15 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         }
         else if (photoAvailable) {
             File directory = new File(getExternalCacheDir().getAbsolutePath() + "/SLR");
+
             if(!directory.isDirectory()){
                 directory.mkdir();
             }
-            String[] children = directory.list();
-            List<String> paths = new ArrayList<>();
-            for(String child : children){
-                paths.add(directory.getAbsolutePath() + "/" + child);
-            }
 
-            File bestPhoto = new File(PickBestImage.pickImage(paths));
+            String[] children = directory.list();
+            File bestPhoto = new File(PickBestImage.pickImage(photos));
+            photos.clear();
+
             int size = (int) bestPhoto.length();
             byte[] bytes = new byte[size];
 
