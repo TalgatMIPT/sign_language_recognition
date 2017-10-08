@@ -74,7 +74,8 @@ def recogn(request):
         # print(parsed_image64)
         im = Image.open(BytesIO(base64.b64decode(parsed_image64)))
         rgb_im = im.convert('RGB')
-        rgb_im.save('temp_images/tr.jpeg')
+        rgb_im.save('temp_images/temp.jpeg')
+        # do ML
         # os.remove('temp_images/tr.jpeg')
 
         return HttpResponse("OK")
@@ -141,10 +142,6 @@ def check_message(request):
         # messages_inf[0].is_received = True
         # messages_inf[0].save()
         # print(messages_inf[0].id)
-
-        # temp = Messages.objects.get(id=messages_inf[0].id)
-        # temp.is_received = True
-        # temp.save(['is_received'])
         print(current_message.client_s)
 
         message_dict = {"client_s": str(current_message.client_s),
