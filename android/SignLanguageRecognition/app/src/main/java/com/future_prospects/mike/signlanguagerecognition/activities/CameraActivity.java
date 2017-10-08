@@ -1,6 +1,9 @@
 package com.future_prospects.mike.signlanguagerecognition.activities;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Rect;
@@ -15,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.future_prospects.mike.signlanguagerecognition.R;
@@ -43,11 +47,14 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     private long curtime = -1;
     private List<byte[]> photos;
 
+    TextView messageFromServer;
+
+    private StringBuilder message;
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
         // если хотим, чтобы приложение постоянно имело портретную ориентацию
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -58,6 +65,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.activity_camera);
+        messageFromServer = (TextView)findViewById(R.id.messageTV);
 
         // наше SurfaceView имеет имя SurfaceView01
         preview = (SurfaceView) findViewById(R.id.SurfaceView01);
@@ -71,6 +79,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         shotBtn.setText("Shot");
         shotBtn.setOnClickListener(this);
         photos = new ArrayList<>();
+
+        message = new StringBuilder();
     }
 
     @Override
@@ -208,7 +218,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                 File file = new File(filename);
                 FileOutputStream filecon = new FileOutputStream(file);
                 image.compressToJpeg(
-                        new Rect(0, 0, image.getWidth(), image.getHeight()), 90,
+                        new Rect(0, 0, image.getWidth(), image.getHeight()), 45,
                         filecon);
                 byte[] array = new byte[(int) file.length()];
                 FileInputStream io = new FileInputStream(file);
@@ -255,6 +265,20 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         Log.d("Char", s);
         photoAvailable = true;
         curtime = System.currentTimeMillis();
+        ValueAnimator fadeAnim = ObjectAnimator.ofFloat(messageFromServer, "alpha", 1f, 0f);
+        fadeAnim.setDuration(150);
+        fadeAnim.reverse();
+        if (s.length() < 10) {
+            messageFromServer.setText(s);
+            message.append(s);
+        }
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra("message", message.toString());
+        setResult(2, intent);
+        super.onBackPressed();
+    }
 }

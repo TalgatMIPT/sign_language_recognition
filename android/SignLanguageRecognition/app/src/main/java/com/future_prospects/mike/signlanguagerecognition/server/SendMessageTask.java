@@ -3,10 +3,8 @@ package com.future_prospects.mike.signlanguagerecognition.server;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
-import android.util.Base64;
 import android.util.Log;
 
-import com.future_prospects.mike.signlanguagerecognition.presentors.ImagePresentor;
 import com.future_prospects.mike.signlanguagerecognition.presentors.MessagePresentor;
 
 import java.io.IOException;
@@ -59,11 +57,11 @@ public class SendMessageTask extends AsyncTask<String, Void, String> {
                 Log.w(TAG, "Response is successful");
             }
 
-            if (response.body() != null) {
+//            if (response.body() != null) {
                 return response.body().string();
-            } else {
-                Log.w(TAG, "Response body is null");
-            }
+//            } else {
+//                Log.w(TAG, "Response body is null");
+//            }
         } catch (IOException e) {
             Log.e(TAG, "Could not execute server request", e);
         }

@@ -17,6 +17,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ChatActivity extends AppCompatActivity implements MessagePresentor {
+    private final static String TAG = ChatActivity.class.toString();
+
     @BindView(R.id.chat_view)
     ChatView chatView;
 
@@ -30,7 +32,7 @@ public class ChatActivity extends AppCompatActivity implements MessagePresentor 
             @Override
             public void onClick(View v) {
                 Log.d("foo", "bar");
-                startActivity(new Intent(ChatActivity.this, CameraActivity.class));
+                startActivityForResult(new Intent(ChatActivity.this, CameraActivity.class), 1);
             }
         });
 
@@ -54,5 +56,13 @@ public class ChatActivity extends AppCompatActivity implements MessagePresentor 
                 .build();
         chatView.send(msg);
         chatView.setInputText("");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String message = data.getExtras().getString("message");
+        chatView.setInputText(message);
+        Log.d(TAG, "Message is "+message);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
