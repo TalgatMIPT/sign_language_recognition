@@ -21,6 +21,7 @@ import com.future_prospects.mike.signlanguagerecognition.R;
 import com.future_prospects.mike.signlanguagerecognition.model.ProcessImage;
 import com.future_prospects.mike.signlanguagerecognition.presentors.ImagePresentor;
 import com.future_prospects.mike.signlanguagerecognition.server.ImageSenderAsyncTask;
+import com.future_prospects.mike.signlanguagerecognition.utils.PickBestImage;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -28,6 +29,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class CameraActivity extends Activity implements SurfaceHolder.Callback, View.OnClickListener,
         Camera.PictureCallback, Camera.PreviewCallback, Camera.AutoFocusCallback, ImagePresentor
@@ -203,7 +207,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                 File file = new File(filename);
                 FileOutputStream filecon = new FileOutputStream(file);
                 image.compressToJpeg(
-                        new Rect(0, 0, image.getWidth(), image.getHeight()), 90,
+                        new Rect(0, 0, image.getWidth(), image.getHeight()), 45,
                         filecon);
             } catch (FileNotFoundException e) {
                 Toast toast = Toast
@@ -216,21 +220,28 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
             if(!directory.isDirectory()){
                 directory.mkdir();
             }
-            File randomPhoto = new File(directory.listFiles()[5].getPath());
-            int size = (int) randomPhoto.length();
+            String[] children = directory.list();
+            List<String> paths = new ArrayList<>();
+            for(String child : children){
+                paths.add(directory.getAbsolutePath() + "/" + child);
+            }
+
+            File bestPhoto = new File(PickBestImage.pickImage(paths));
+            int size = (int) bestPhoto.length();
             byte[] bytes = new byte[size];
+
             try {
-                BufferedInputStream buf = new BufferedInputStream(new FileInputStream(randomPhoto));
+                BufferedInputStream buf = new BufferedInputStream(new FileInputStream(bestPhoto));
                 buf.read(bytes, 0, bytes.length);
                 buf.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            String[] children = directory.list();
             for (int i = 0; i < children.length; i++) {
                 new File(directory, children[i]).delete();
             }
+
             ProcessImage image = new ProcessImage(bytes);
             new ImageSenderAsyncTask(this, getApplicationContext()).execute(image);
             photoAvailable = false;

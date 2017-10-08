@@ -44,17 +44,6 @@ public class LoginActivity extends AppCompatActivity implements AuthorizePresent
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        System.loadLibrary( "MobileImagingEngine" );
-        try {
-            Log.v( TAG, "MILicenser.getVersionInfo(): " + MILicenser.getVersionInfo() );
-            final InputStream licenseStream = getAssets().open( "MIRT-0100-0006-3268-0632-9491.ABBYY.LICENSE" );
-            MILicenser.setLicense( licenseStream, "Android_ID" );
-            Log.v( TAG, "MILicenser.setLicense() succeeded. " + MILicenser.getLicenseInfo() );
-        } catch( final Exception exception ) {
-            Log.e( TAG, "MILicenser.setLicense() failed", exception );
-        }
-        MIContext.createInstance();
-
         ActivityCompat.requestPermissions(LoginActivity.this,
                 new String[]{Manifest.permission.CAMERA},
                 228);
