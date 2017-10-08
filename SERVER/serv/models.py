@@ -5,8 +5,8 @@ from django.contrib import auth
 
 
 class Messages(models.Model):
-    client_s = models.ForeignKey('auth.User', related_name='+')
-    client_r = models.ForeignKey('auth.User', related_name='+')
+    client_s = models.ForeignKey('auth.User', related_name='client_s')
+    client_r = models.ForeignKey('auth.User', related_name='client_r')
     message = models.TextField()
     message_date = models.DateTimeField(blank=True, null=True)
     is_received = models.BooleanField(blank=True, default=True)
