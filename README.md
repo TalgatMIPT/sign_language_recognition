@@ -8,11 +8,11 @@ machine learning algorithms.
 This project contains 3 modules: Android app, Python app, that uses machine learning algorithms and Python Django app that implements the server. Android app captures frames from video frame, takes frame with the best quality and then sends it to the server. After the response is got application continious to capture frames. Django app gets the frame encrypted by Base64, decrypt it and sends to other Python application with machine learning. This app uses algorithms for recognition circuit of hand and tries to define showing symbol. After that it sends callback to the server that contatins symbol and then the server returns it to Android app. This result is written in buffer. Also we implemented simple authentication and chat system. We just wanted to show how it can work.
 
 ## Git
-We used 5 branches for this project:
-1)Master branch
-2)talgat branch: contatins server commits
-3)android branch: contains Android app commits
-4)ilya_ml: contains Python app commits by 1st machine learning developer
+We used 5 branches for this project:<br>
+1)Master branch<br>
+2)talgat branch: contatins server commits<br>
+3)android branch: contains Android app commits<br>
+4)ilya_ml: contains Python app commits by 1st machine learning developer<br>
 5)ML_Nastya: contatins Python app commits by 2nd machine learning developer
 
 ## Result and furtherance
